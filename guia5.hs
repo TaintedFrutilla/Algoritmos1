@@ -1,3 +1,6 @@
+--  pinga
+
+
 -- Ejercicio 1
 longitud :: [t] -> Int
 longitud [] = 0
