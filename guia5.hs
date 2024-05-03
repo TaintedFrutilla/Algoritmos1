@@ -35,7 +35,7 @@ todosIguales :: (Eq t) => [t] -> Bool
 todosIguales [] = True
 todosIguales [x] = True
 todosIguales (y:x:xs) | y /= x = False
-                      | otherwise = todosIguales xs
+                      | otherwise = todosIguales (y:xs)
 
 -- Con "todosIguales xs" me estoy quedando con esa cola, y de ahi comenzo a comparar
 
@@ -45,11 +45,21 @@ todosDistintos [x] = True
 todosDistintos (x:xs)   | pertenece x xs = False
                         | otherwise = todosDistintos xs
 
+
+-- Devuelve True si existen exactamente dos posiciones distintos con igual valor
 hayRepetidos :: (Eq t) => [t] -> Bool
-hayRepetidos [] = False
-hayRepetidos [x] = False
-hayRepetidos (x:xs) | pertenece x xs = True
-                    | otherwise = hayRepetidos xs
+hayRepetidos [ ] = False 
+hayRepetidos [ x ] = False
+hayRepetidos (y:x:xs)   | y == x && not(pertenece y xs) = True
+                        | otherwise = hayRepetidos(y:xs)
+
+-- Devuelve True si exiten mas de dos posiciones distintas con iguales valor
+hayRepetidos2 :: (Eq t) => [t] -> Bool
+hayRepetidos2 [] = False
+hayRepetidos2 [x] = False
+hayRepetidos2 (x:xs)    | pertenece x xs = True
+                        | otherwise = hayRepetidos2 xs
+
 
 -- Dado un entero y una lista, elimina la primera aparicion del entero en la lista.
 quitar :: (Eq t) => t -> [t] -> [t]
@@ -58,9 +68,10 @@ quitar y (x:xs) | y == x = xs
                 | otherwise = x : quitar y xs
 
 -- Dado un entero y una lista, quiero que elimine todas las apariciones de ese entero en la lista.
+
 quitarTodos :: (Eq t) => t -> [t] -> [t]
 quitarTodos y [] = []
-quitarTodos y (x:xs)    | y == x = quitarTodos y xs
+quitarTodos y (x:xs)    |  y == x = quitarTodos y xs
                         | otherwise = x : quitarTodos y xs
 
 
@@ -118,3 +129,20 @@ sumarElUltimo xs = sumarN (ultimo xs) xs
 --pares :: [Integer] -> [Integer]
 --multiplosDeN :: Integer -> [Integer] -> [Integer]
 --ordenar :: [Integer] -> [Integer]
+
+-- ej: [h,o,l,a, , ,a] -> [h,o,l,a, ,a]
+sacarBlancosRepetidos :: [Char] -> [Char]
+sacarBlancosRepetidos [] = []
+sacarBlancosRepetidos (x:[]) = [x]
+sacarBlancosRepetidos (x:y:xs) | x ==' ' && y==' ' = sacarBlancosRepetidos (xs) 
+                               | otherwise = x : sacarBlancosRepetidos (y:xs)
+
+contarPalabras :: [Char] -> Integer
+contarPalabras [] = 0
+contarPalabras (x:y:xs) = contarPalabrasAux(sacarBlancosRepetidos (x:y:xs))
+
+contarPalabrasAux :: [Char] -> Integer
+contarPalabrasAux [] = 0
+contarPalabrasAux (x:[]) = 1
+contarPalabrasAux (x:y:xs)  | x == ' ' = 1+ contarPalabrasAux xs
+                            | otherwise = contarPalabrasAux (y:xs)
