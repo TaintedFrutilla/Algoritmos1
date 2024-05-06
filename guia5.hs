@@ -89,12 +89,23 @@ listaContenida :: (Eq t) => [t] -> [t] -> Bool
 listaContenida [] ys = True
 listaContenida (x:xs) ys = pertenece x ys && listaContenida xs ys
 
-mismosElementos :: (Eq t) => [t] -> [t] -> Bool
-mismosElementos (x:xs) ys = listaContenida (x:xs) ys && mismosElementos xs ys 
+--mismosElementos :: (Eq t) => [t] -> [t] -> Bool
+--mismosElementos [][] = True
+--mismosElementos (x:xs) ys = listaContenida (x:xs) ys && mismosElementos xs ys 
+
+sameElementos :: (Eq t) => [t] -> [t] -> Bool
+sameElementos (x:xs) ys = listaContenida (x:xs) ys && listaContenida ys  (x:xs)
 
 
+-- Los capicua de listas que contienen elementos impares, dan False
+-- Y los capicua pares da verdadero, siempre  y cuando cumplan las condiciones.
+-- Vendria a ser como capicua puros
 capicua :: (Eq t) => [t] -> Bool
-capicua xs = xs == reverso xs
+capicua (x:xs)  | x /= ultimo xs = False
+                | otherwise = capicua xs
+
+capicuaDebil :: (Eq t) => [t] -> Bool
+capicuaDebil xs = xs == reverso xs
 
 -- Ejercicio 3 
 sumatoria :: [Integer] -> Integer
